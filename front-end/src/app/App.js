@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginPage from '../pages/LoginPage';
 import RegisterPage from '../pages/RegisterPage';
 import WalletPage from '../pages/WalletPage';
@@ -8,20 +8,12 @@ const App = () => {
     return (
         <Router>
             <div>
-                <Switch>
-                    <Route path="/login">
-                        <LoginPage />
-                    </Route>
-                    <Route path="/register">
-                        <RegisterPage />
-                    </Route>
-                    <Route path="/wallet">
-                        <WalletPage />
-                    </Route>
-                    <Route path="/">
-                        <LoginPage /> {/* Assuming you want the login page as the default */}
-                    </Route>
-                </Switch>
+                <Routes>
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/register" element={<RegisterPage />} />
+                    <Route path="/wallet" element={<WalletPage />} />
+                    <Route path="/" element={<LoginPage />} /> {/* Default route */}
+                </Routes>
             </div>
         </Router>
     );

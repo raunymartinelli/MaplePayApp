@@ -1,21 +1,20 @@
-
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { LOGIN_USER } from '../graphql/mutations';
-import { useHistory } from 'react-router-dom'; // If you're using React Router for navigation
+import { useNavigate } from 'react-router-dom'; // Updated import for React Router v6
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loginUser, { loading, error }] = useMutation(LOGIN_USER);
-    const history = useHistory();
+    const navigate = useNavigate(); // Updated to useNavigate for React Router v6
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
             const { data } = await loginUser({ variables: { email, password } });
             localStorage.setItem('token', data.loginUser.token); // Adjust according to your schema
-            history.push('/wallet'); // Redirect to the wallet page after login
+            navigate('/wallet'); // Updated to use navigate for redirection in React Router v6
         } catch (err) {
             console.error('Login error', err);
         }
