@@ -4,9 +4,10 @@
   "description": "",
   "main": "back-end/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon back-end/server.js",
-    "dev": "back-end/server.js"
+  	"test": "echo \"Error: no test specified\" && exit 1",
+  	"start-backend": "nodemon back-end/server.js",
+  	"start-frontend": "cd front-end && npm start",
+  	"start": "concurrently \"npm run start-backend\" \"npm run start-frontend\""
   },
   "keywords": [],
   "author": "",
@@ -24,6 +25,7 @@
     "validator": "^13.11.0"
   },
   "devDependencies": {
+    "concurrently": "^8.2.2",
     "nodemon": "^3.0.3"
   }
 }
