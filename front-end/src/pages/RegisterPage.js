@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { REGISTER_USER } from '../graphql/mutations';
+import './css/RegisterPage.css';
+import { BrowserRouter as Router, Link } from 'react-router-dom';
 
 const RegisterPage = () => {
     const [formData, setFormData] = useState({
@@ -47,10 +49,12 @@ const RegisterPage = () => {
     };
 
     return (
-        <div>
-            <h1>Register</h1>
+        <div className="container">
+            <h1 style={{color: "#D24545"}}>Create an account</h1>
+            <p style={{fontFamily: 'Inter, sans-serif', textAlign: 'center', color: "#D24545"}}>Create an account or <Link to='/Login' style={{color: "#D24545"}}>login</Link></p>
             <form onSubmit={handleSubmit}>
                 <input
+                    className="input-field"
                     name="name"
                     type="text"
                     placeholder="Name"
@@ -59,6 +63,7 @@ const RegisterPage = () => {
                     required
                 />
                 <input
+                    className="input-field"
                     name="email"
                     type="email"
                     placeholder="Email"
@@ -67,6 +72,7 @@ const RegisterPage = () => {
                     required
                 />
                 <input
+                    className="input-field"
                     name="password"
                     type="password"
                     placeholder="Password"
@@ -75,6 +81,7 @@ const RegisterPage = () => {
                     required
                 />
                 <input
+                    className="input-field"
                     name="currentAddress"
                     type="text"
                     placeholder="Current Address"
@@ -83,6 +90,7 @@ const RegisterPage = () => {
                     required
                 />
                 <select
+                    className="input-field"
                     name="gender"
                     value={formData.gender}
                     onChange={handleChange}
@@ -93,12 +101,13 @@ const RegisterPage = () => {
                     <option value="Female">Female</option>
                     {/* Add more gender options as necessary */}
                 </select>
-                <button type="submit" disabled={loading}>
+                <button className="submit-button" type="submit" disabled={loading}>
                     Register
                 </button>
+                <a href="#">Forgot password?</a>
             </form>
-            {registerSuccess && <p>Registration successful!</p>} {/* Display success message */}
-            {error && <p>Error registering: {error.message}</p>}
+            {registerSuccess && <p className="success-message">Registration successful!</p>} {/* Display success message */}
+            {error && <p className="error-message">Error registering: {error.message}</p>}
         </div>
     );
 };
