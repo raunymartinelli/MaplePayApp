@@ -14,11 +14,9 @@ export const LOGIN_USER = gql`
   }
 `;
 
-import { gql } from '@apollo/client';
-
 export const REGISTER_USER = gql`
-  mutation RegisterUser($name: String!, $email: String!, $password: String!) {
-    registerUser(name: $name, email: $email, password: $password) {
+  mutation RegisterUser($name: String!, $email: String!, $password: String!, $currentAddress: String!, $gender: String!) {
+    registerUser(name: $name, email: $email, password: $password, currentAddress: $currentAddress, gender: $gender) {
       token
       user {
         _id
@@ -28,8 +26,6 @@ export const REGISTER_USER = gql`
     }
   }
 `;
-// src/graphql/mutations.js
-import { gql } from '@apollo/client';
 
 export const ADD_FUNDS = gql`
   mutation AddFunds($amount: Float!) {
@@ -44,6 +40,7 @@ export const ADD_FUNDS = gql`
     }
   }
 `;
+
 export const TRANSFER_FUNDS = gql`
   mutation TransferFunds($toUserId: ID!, $amount: Float!) {
     transferFunds(toUserId: $toUserId, amount: $amount) {
@@ -57,8 +54,9 @@ export const TRANSFER_FUNDS = gql`
     }
   }
 `;
+
 export const WITHDRAW_FUNDS = gql`
-  mutation withdrawFunds($userId: ID!, $amount: Float!) {
+  mutation WithdrawFunds($userId: ID!, $amount: Float!) {
     withdrawFunds(_id: $userId, amount: $amount) {
       _id
       operationType
@@ -72,4 +70,3 @@ export const WITHDRAW_FUNDS = gql`
     }
   }
 `;
-
