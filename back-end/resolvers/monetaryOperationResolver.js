@@ -11,12 +11,12 @@ const formatDate = (date) =>{
 
 const monetaryOperationResolvers = {
   Query: {
-    getAllMonetaryOperations: async (_, { _id }) => {
+    getAllMonetaryOperations: async (_, {_id}) => {
       try {
         let balance = 0;
-        const operations = await MonetaryOperation.find({ user: _id })
+        const operations = await MonetaryOperation.find({user: _id})
             .populate('user')
-            .sort({ date: 1 });
+            .sort({date: 1});
 
         const operationsWithBalance = operations.map(operation => {
           // Provide a default message if none exists
@@ -58,7 +58,7 @@ const monetaryOperationResolvers = {
     },
 
 
-    getUserBalance: async (_, { _id }) => {
+    getUserBalance: async (_, {_id}) => {
       try {
         const user = await User.findById(_id);
         if (!user) {
@@ -73,45 +73,81 @@ const monetaryOperationResolvers = {
   },
 
   Mutation: {
-    addFunds: async (_, { _id, amount }) => {
-      // Assuming _id is the ID of the user to whom funds are being added
+    addFunds: async (_, {_id, amount}) => {
+      let session = null;
       try {
-        const user = await User.findById(_id);
+        session = await mongoose.startSession();
+        session.startTransaction();
+
+        const user = await User.findById(_id).session(session);
         if (!user) {
           throw new Error('User not found');
         }
+        if (user.name === null || user.name === undefined) {
+          throw new Error('User name is null or undefined');
+        }
 
+        // Update the user's amount
         user.amount += amount;
-        await user.save();
+        await user.save({ session });
 
+        // Create the date string
         const date = new Date();
         const formattedDate = formatDate(date).toLocaleString();
-        const message = `An amount of ${amount} was added for user ${user.name} on ${formattedDate}.`;
 
+        // Create a new monetary operation
         const newMonetaryOperation = new MonetaryOperation({
           operationType: 'deposit',
           amount,
-          message,
+          message: `An amount of ${amount} was added for user ${user.name} on ${formattedDate}.`,
           date: formattedDate,
-          user: _id,
+          user: user._id,
         });
 
-        await newMonetaryOperation.save();
-        return {
+        // Save the monetary operation
+        await newMonetaryOperation.save({ session });
+
+        // Add the monetary operation to the user's transactions
+        user.transactions.push(newMonetaryOperation._id);
+        await user.save({ session });
+
+        // Commit the transaction
+        await session.commitTransaction();
+
+        // Construct the response object
+        const responseObject = {
           ...newMonetaryOperation.toObject(),
-          message, // Include the message in the response
+          message: `An amount of ${amount} was added for user ${user.name} on ${formattedDate}.`,
+          date: formattedDate,
+          user: {
+            name: user.name,
+            email: user.email
+          }
         };
+
+        return responseObject;
       } catch (error) {
-        console.error('Error adding funds:', error.message);
+        console.error('Error adding funds:', error);
+        // Abort the transaction if an error occurs
+        if (session) {
+          await session.abortTransaction();
+        }
         throw new Error('Failed to add funds');
+      } finally {
+        // End the session
+        if (session) {
+          session.endSession();
+        }
       }
     },
+
+
 
     transferFunds: async (_, { fromUserId, toUserId, amount }) => {
       let session;
       try {
-        if (amount < 0) {
-          throw new Error('Invalid amount: Amount cannot be negative');
+        if (amount <= 0) {
+          throw new Error('Invalid amount: Amount must be positive');
         }
 
         session = await mongoose.startSession();
@@ -130,47 +166,75 @@ const monetaryOperationResolvers = {
 
         fromUser.amount -= amount;
         toUser.amount += amount;
+
         await fromUser.save({ session });
         await toUser.save({ session });
+
+        const formattedDate = formatDate(new Date()); // Use the same formatDate function
+
+        const messageOut = `Transferred ${amount} to ${toUser.name} on ${formattedDate}.`;
+        const messageIn = `Received ${amount} from ${fromUser.name} on ${formattedDate}.`;
 
         const transferOutOperation = new MonetaryOperation({
           operationType: 'transfer_out',
           amount: -amount,
-          date: new Date().toISOString(),
-          user: fromUserId,
-          message: `Transferred ${amount} to ${toUser.name} on ${new Date().toISOString()}.`
+          date: formattedDate,
+          user: fromUser._id,
+          message: messageOut
         });
-
-        await transferOutOperation.save({ session });
 
         const transferInOperation = new MonetaryOperation({
           operationType: 'transfer_in',
-          amount,
-          date: new Date().toISOString(),
-          user: toUserId,
-          message: `Received ${amount} from ${fromUser.name} on ${new Date().toISOString()}.`
+          amount: amount,
+          date: formattedDate,
+          user: toUser._id,
+          message: messageIn
         });
 
+        await transferOutOperation.save({ session });
         await transferInOperation.save({ session });
 
-        await session.commitTransaction();
-        session.endSession();
+        // Link the operations to the users' transactions
+        fromUser.transactions.push(transferOutOperation._id);
+        toUser.transactions.push(transferInOperation._id);
+        await fromUser.save({ session });
+        await toUser.save({ session });
 
-        // Return the 'transferOutOperation', which now includes an _id field
-        return transferOutOperation;
+        await session.commitTransaction();
+
+        // Construct the result according to the addFunds output
+        return {
+          _id: transferOutOperation._id,
+          amount: transferOutOperation.amount,
+          message: transferOutOperation.message,
+          operationType: transferOutOperation.operationType,
+          user: {
+            name: fromUser.name,
+            email: fromUser.email
+          },
+          date: formattedDate, // Use the formatted date
+        };
       } catch (error) {
-        if (session) {
+        console.error('Error transferring funds:', error);
+        if (session && session.inTransaction()) {
           await session.abortTransaction();
+        }
+        throw new Error('Failed to transfer funds');
+      } finally {
+        if (session) {
           session.endSession();
         }
-        console.error('Error transferring funds:', error.message);
-        throw new Error('Failed to transfer funds');
       }
     },
 
+
     withdrawFunds: async (_, { _id, amount }) => {
+      let session = null;
       try {
-        const user = await User.findById(_id);
+        session = await mongoose.startSession();
+        session.startTransaction();
+
+        const user = await User.findById(_id).session(session);
 
         if (!user) {
           throw new Error('User not found');
@@ -180,30 +244,53 @@ const monetaryOperationResolvers = {
           throw new Error('Insufficient funds');
         }
 
-        user.amount -= amount;
-        await user.save();
+        user.amount -= amount; // Update the user's amount
+        await user.save({ session });
 
-        // Format the date for the message
-        const date = new Date().toISOString();
-        // Create a message for the operation
-        const message = `Withdrawal of ${amount} by ${user.name} was successful on ${date}`;
+        const formattedDate = formatDate(new Date()); // Use your formatDate function
 
+        // Create a new monetary operation
         const newMonetaryOperation = new MonetaryOperation({
           operationType: 'withdrawal',
-          amount,
-          date: date,
-          user: _id,
-          message: message, // Add the message here
+          amount: -amount, // Withdrawals are negative
+          date: formattedDate, // Assuming your schema expects a string here
+          user: user._id,
+          message: `Withdrawal of ${amount} by ${user.name} on ${formattedDate}.`
         });
 
-        await newMonetaryOperation.save();
-        return newMonetaryOperation;
+        // Save the new monetary operation
+        await newMonetaryOperation.save({ session });
+
+        // Add the monetary operation to the user's transactions
+        user.transactions.push(newMonetaryOperation._id);
+        await user.save({ session });
+
+        await session.commitTransaction();
+
+        // Construct the response object
+        const responseObject = {
+          ...newMonetaryOperation.toObject(),
+          message: `Withdrawal of ${amount} by ${user.name} on ${formattedDate}.`,
+          user: {
+            name: user.name,
+            email: user.email
+          },
+          date: formattedDate, // Use the formatted date
+        };
+
+        return responseObject;
       } catch (error) {
-        console.error('Error withdrawing funds:', error.message);
+        console.error('Error withdrawing funds:', error);
+        if (session && session.inTransaction()) {
+          await session.abortTransaction();
+        }
         throw new Error('Failed to withdraw funds');
+      } finally {
+        if (session) {
+          session.endSession();
+        }
       }
     },
-
   },
 };
 
