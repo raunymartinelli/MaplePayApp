@@ -4,10 +4,10 @@
   "description": "",
   "main": "back-end/server.js",
   "scripts": {
-  	"test": "echo \"Error: no test specified\" && exit 1",
-  	"start-backend": "nodemon back-end/server.js",
-  	"start-frontend": "cd front-end && npm start",
-  	"start": "concurrently \"npm run start-backend\" \"npm run start-frontend\""
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start-backend": "nodemon back-end/server.js",
+    "start-frontend": "cd front-end && npm start",
+    "start": "concurrently \"npm run start-backend\" \"npm run start-frontend\""
   },
   "keywords": [],
   "author": "",
@@ -22,6 +22,7 @@
     "express-graphql": "^0.12.0",
     "graphql": "^15.8.0",
     "jsonwebtoken": "^9.0.2",
+    "jwt-decode": "^4.0.0",
     "mongoose": "^8.1.3",
     "nodemon": "^3.0.3",
     "react-router-dom": "^6.22.1",
