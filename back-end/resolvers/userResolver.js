@@ -85,12 +85,12 @@ const userResolvers = {
         throw new Error('User already exists with that email');
       }
 
-      const hashedPassword = await bcrypt.hash(password, 10);
+      // const hashedPassword = await bcrypt.hash(, 10);
       const user = new User({
         name,
         email,
         gender,
-        password: hashedPassword,
+        password,
         currentAddress,
         amount: 0, // Assuming the initial amount is 0
       });
@@ -111,10 +111,10 @@ const userResolvers = {
         }
 
         // Compare the provided password with the hashed password in the database
-        // const validPassword = await bcrypt.compare(password, user.password);
-        // if (!validPassword) {
-        //   throw new Error('Invalid password. Please check your password and try again.');
-        // }
+        const validPassword = await bcrypt.compare(password, user.password);
+        if (!validPassword) {
+          throw new Error('Invalid password. Please check your password and try again.');
+        }
 
         // User is found and password matches, generate a JWT
         const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '1h' });

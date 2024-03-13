@@ -1,7 +1,6 @@
-
-import React, { useState } from 'react';
-import { useMutation } from '@apollo/client';
-import { ADD_FUNDS } from '../graphql/mutations'; // Make sure the mutation is correctly defined in your mutations.js file
+import React, {useState} from 'react';
+import {useMutation} from '@apollo/client';
+import {ADD_FUNDS} from '../graphql/mutations'; // Make sure the mutation is correctly defined in your mutations.js file
 
 const DepositForm = () => {
     const [amount, setAmount] = useState('');
