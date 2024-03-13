@@ -20,6 +20,13 @@ const typeDefs = gql`
     contacts: [User]!
     transactions: [MonetaryOperation]!
   }
+  
+  type TransferOperationResult {
+  operation: MonetaryOperation!
+  fromUser: User!
+  toUser: User!
+}
+
 
   type MonetaryOperation {
     _id: ID!
