@@ -4,9 +4,17 @@ const User = require('../models/userModel');
 const MonetaryOperation = require('../models/monetaryOperationModel');
 const mongoose = require('mongoose');
 
-
-const formatDate = (date) =>{
-  return date.toLocaleString();
+// This function will format a date as 'mm/dd/yyyy, hh:mm:ss AM/PM'
+function formatDate(date) {
+  return new Date(date).toLocaleString('en-US', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: true
+  });
 }
 
 const monetaryOperationResolvers = {
@@ -16,14 +24,14 @@ const monetaryOperationResolvers = {
         let balance = 0;
         const operations = await MonetaryOperation.find({user: _id})
             .populate('user')
-            .sort({date: 1});
+            .sort({date: -1});
 
         const operationsWithBalance = operations.map(operation => {
           // Provide a default message if none exists
           const operationMessage = operation.message || 'No message provided.';
 
           // Format the date
-          const formattedDate = new Date(operation.date).toLocaleString();
+          const formattedDate = formatDate(operation.date);
 
           // Adjust the balance based on the operation type
           if (operation.operationType === 'deposit' || operation.operationType === 'transfer_in') {
@@ -56,7 +64,6 @@ const monetaryOperationResolvers = {
         throw new Error('Failed to fetch monetary operations');
       }
     },
-
 
     getUserBalance: async (_, {_id}) => {
       try {
@@ -93,7 +100,7 @@ const monetaryOperationResolvers = {
 
         // Create the date string
         const date = new Date();
-        const formattedDate = formatDate(date).toLocaleString();
+        const formattedDate = formatDate(date);
 
         // Create a new monetary operation
         const newMonetaryOperation = new MonetaryOperation({
@@ -141,8 +148,6 @@ const monetaryOperationResolvers = {
       }
     },
 
-
-
     transferFunds: async (_, { fromUserId, toUserId, amount }) => {
       let session;
       try {
@@ -170,7 +175,7 @@ const monetaryOperationResolvers = {
         await fromUser.save({ session });
         await toUser.save({ session });
 
-        const formattedDate = formatDate(new Date()); // Use the same formatDate function
+        const formattedDate = formatDate(new Date());
 
         const messageOut = `Transferred ${amount} to ${toUser.name} on ${formattedDate}.`;
         const messageIn = `Received ${amount} from ${fromUser.name} on ${formattedDate}.`;
@@ -227,7 +232,6 @@ const monetaryOperationResolvers = {
       }
     },
 
-
     withdrawFunds: async (_, { _id, amount }) => {
       let session = null;
       try {
@@ -247,7 +251,7 @@ const monetaryOperationResolvers = {
         user.amount -= amount; // Update the user's amount
         await user.save({ session });
 
-        const formattedDate = formatDate(new Date()); // Use your formatDate function
+        const formattedDate = formatDate(new Date());
 
         // Create a new monetary operation
         const newMonetaryOperation = new MonetaryOperation({

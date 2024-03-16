@@ -7,13 +7,17 @@ export const GET_USER_BY_ID = gql`
       name
       email
       amount
-      transactions {
-        _id
-        operationType
-        amount
-        date
-        message
-      }
+    }
+  }
+`;
+
+export const GET_ALL_MONETARY_OPERATIONS = gql`
+  query GetAllMonetaryOperations($_id: ID!) { 
+    getAllMonetaryOperations(_id: $_id) {
+      _id
+      operationType
+      date
+      amount
     }
   }
 `;

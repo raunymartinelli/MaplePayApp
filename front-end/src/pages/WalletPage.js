@@ -1,8 +1,15 @@
 import React from 'react';
 import { jwtDecode } from 'jwt-decode';
 import Wallet from '../components/Wallet';
+import CardCarousel from '../components/CardCarousel';
+import { BrowserRouter as Router, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import './css/WalletPage.css';
+
 
 const WalletPage = () => {
+    const navigate = useNavigate(); // Initialize useNavigate hook
+
     const token = localStorage.getItem('token');
     let userId;
 
@@ -16,12 +23,24 @@ const WalletPage = () => {
     }
 
     if (!userId) {
-        return <p>Please login to view your wallet.</p>;
+        navigate('/login'); // Redirect to login page if user is not authenticated
+        return null;
     }
+
+    const handleTransactionsClick = () => {
+        navigate('/transactions'); // Navigate to Transactions page when button is clicked
+    };
 
     return (
         <div>
             <h1>Wallet</h1>
+            <CardCarousel />
+            <div className="transactions-header">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <h2>Transactions</h2>
+                <button onClick={handleTransactionsClick}>View All</button>
+            </div>
+            </div>
             <Wallet userId={userId} />
         </div>
     );
