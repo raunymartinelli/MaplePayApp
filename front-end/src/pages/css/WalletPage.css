@@ -1,51 +1,97 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-/* Add this CSS to style your Wallet component */
-
 .wallet-container {
-    background-color: #fff; /* White background for the wallet container */
-    border-radius: 8px; /* Rounded corners for the container */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    padding: 20px; /* Padding around the content */
-    max-width: 400px; /* Maximum width of the wallet container */
-    margin: 20px auto; /* Center the wallet container */
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 20px auto; /* Center the container horizontally */
 }
 
 .wallet-balance {
-    font-size: 1.5em; /* Larger font size for balance */
-    color: #333; /* Dark grey color for text for readability */
-    margin-bottom: 20px; /* Margin below the balance for spacing */
-    font-weight: bold; /* Bold font weight for balance */
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: bold;
 }
 
 .wallet-table {
-    width: 100%; /* Full width table */
-    border-collapse: collapse; /* Collapse borders */
-    margin-top: 10px; /* Margin top for spacing from balance */
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
 }
 
 .wallet-table thead {
-    background-color: #f5f5f5; /* Light grey background for header */
+    background-color: #f5f5f5;
 }
 
 .wallet-table th,
 .wallet-table td {
-    text-align: left; /* Align text to the left */
-    padding: 8px; /* Padding inside cells */
-    border-bottom: 1px solid #ddd; /* Light border for the cells */
+    text-align: left;
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
 }
 
 .wallet-table th {
-    color: #666; /* Darker grey color for header cells */
+    color: #666;
 }
 
 .wallet-table td {
-    color: #333; /* Dark grey color for text */
+    color: #333;
 }
 
 .wallet-table tr:nth-child(even) {
-    background-color: #f9f9f9; /* Zebra striping for rows */
+    background-color: #f9f9f9;
 }
 
 .wallet-table tr:hover {
-    background-color: #f1f1f1; /* Light grey background on row hover */
+    background-color: #f1f1f1;
+}
+
+.wallet-carousel-container {
+    margin-bottom: 20px; /* Added margin bottom for spacing */
+}
+
+.wallet-insight-container {
+    margin-bottom: 20px; /* Added margin bottom for spacing */
+}
+
+.wallet-request-container {
+    margin-bottom: 20px; /* Added margin bottom for spacing */
+}
+
+.wallet-buttons-container {
+    display: flex;
+    justify-content: space-between; /* Space evenly between buttons */
+}
+
+.wallet-send-button,
+.wallet-add-button {
+    padding: 10px 20px;
+    background-color: #D24545;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.wallet-send-button:hover,
+.wallet-add-button:hover {
+    background-color: #B53636; /* Darker background color on hover */
+}
+.view-all-button {
+    flex: 1; /* Let the button grow to take up available space */
+    background-color: #D24545;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 16px;
+    cursor: pointer;
+    white-space: nowrap; /* Prevent text wrapping */
+    overflow: hidden; /* Hide overflow text */
+    text-overflow: ellipsis; /* Display ellipsis (...) for overflow text */
+    width: 100%; /* Set width to 100% of the available space */
+}
+
+
+.view-all-button:hover {
+    background-color: #B53636;
 }

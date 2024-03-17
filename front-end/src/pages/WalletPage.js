@@ -2,17 +2,15 @@ import React from 'react';
 import { jwtDecode } from 'jwt-decode';
 import Wallet from '../components/Wallet';
 import CardCarousel from '../components/CardCarousel';
-import { BrowserRouter as Router, Link } from 'react-router-dom';
+import Navbar from '../components/Navbar'; // Import NavBar component
 import { useNavigate } from 'react-router-dom';
 import './css/WalletPage.css';
-
 
 const WalletPage = () => {
     const navigate = useNavigate(); // Initialize useNavigate hook
 
     const token = localStorage.getItem('token');
     let userId;
-
     if (token) {
         try {
             const decoded = jwtDecode(token);
@@ -23,7 +21,7 @@ const WalletPage = () => {
     }
 
     if (!userId) {
-        navigate('/login'); // Redirect to login page if user is not authenticated
+        navigate('/loginpage'); // Redirect to login page if user is not authenticated
         return null;
     }
 
@@ -32,16 +30,22 @@ const WalletPage = () => {
     };
 
     return (
-        <div>
-            <h1>Wallet</h1>
+        <div className="wallet-page-container">
+            <Navbar /> {/* Add Navbar component */}
             <CardCarousel />
-            <div className="transactions-header">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h2>Transactions</h2>
-                <button onClick={handleTransactionsClick}>View All</button>
+            <div className="transactions-container">
+                <div className="transactions-header">
+                    <div className="header-content">
+                        <h2>Transactions</h2>
+                        <button className="view-all-button" onClick={handleTransactionsClick}>View All</button>
+                    </div>
+                </div>
+                <Wallet userId={userId} />
             </div>
+            <div className="wallet-buttons-container">
+                <button className="wallet-send-button">Send Money</button>
+                <button className="wallet-add-button">Add Money</button>
             </div>
-            <Wallet userId={userId} />
         </div>
     );
 };
