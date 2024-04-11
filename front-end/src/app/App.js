@@ -5,6 +5,7 @@ import RegisterPage from '../pages/RegisterPage';
 import WalletPage from '../pages/WalletPage';
 import HomePage from '../pages/HomePage';
 import TransactionsPage from '../pages/TransactionsPage'
+import './app.css';
 
 const App = () => {
     return (
@@ -15,6 +16,7 @@ const App = () => {
                     <Route path="/register" element={<RegisterPage />} />
                     <Route path="/wallet" element={<WalletPage />} />
                     <Route path="/transactions" element={<TransactionsPage />} />
+                    <Route path="home" element={<HomePage />} />
                     <Route path="/" element={<HomePage />} /> {/* Default route */}
                 </Routes>
             </div>

@@ -2,7 +2,6 @@ import React from 'react';
 import { jwtDecode } from 'jwt-decode';
 import Wallet from '../components/Wallet';
 import CardCarousel from '../components/CardCarousel';
-import { BrowserRouter as Router, Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import './css/WalletPage.css';
 
