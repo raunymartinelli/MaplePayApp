@@ -69,22 +69,22 @@ const AccountView = () => {
                 <div className="user-info-item">
                     <div className="label">Name</div>
                     <div className="text">{userData?.name}</div>
-                    <div className="edit" onClick={() => handleEditClick("name", "New Name")}>></div>
+                    <div className="edit" onClick={() => handleEditClick("name", "New Name")}></div>
                 </div>
                 <div className="user-info-item">
                     <div className="label">Email</div>
                     <div className="text">{userData?.email}</div>
-                    <div className="edit" onClick={() => handleEditClick("email", "newemail@example.com")}>></div>
+                    <div className="edit" onClick={() => handleEditClick("email", "newemail@example.com")}></div>
                 </div>
                 <div className="user-info-item">
                     <div className="label">Address</div>
                     <div className="text">{userData?.address}</div>
-                    <div className="edit" onClick={() => handleEditClick("address", "New Address")}>></div>
+                    <div className="edit" onClick={() => handleEditClick("address", "New Address")}></div>
                 </div>
                 <div className="user-info-item">
                     <div className="label">Phone #</div>
                     <div className="text">{userData?.phone}</div>
-                    <div className="edit" onClick={() => handleEditClick("phone", "987 654 3210")}>></div>
+                    <div className="edit" onClick={() => handleEditClick("phone", "987 654 3210")}></div>
                 </div>
             </div>
         </div>
