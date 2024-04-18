@@ -2,6 +2,8 @@ import React from 'react';
 import { jwtDecode } from 'jwt-decode';
 import Transactions from '../components/Transactions';
 import './css/TransactionsPage.css';
+import Navbar from './Navbar.js';
+
 
 const TransactionsPage = () => {
     const token = localStorage.getItem('token');
