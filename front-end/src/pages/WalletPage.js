@@ -5,6 +5,8 @@ import CardCarousel from '../components/CardCarousel';
 import { BrowserRouter as Router, Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import './css/WalletPage.css';
+import Navbar from '../components/Navbar';
+
 
 const WalletPage = () => {
     const navigate = useNavigate(); // Initialize useNavigate hook
@@ -21,12 +23,12 @@ const WalletPage = () => {
     }
 
     if (!userId) {
-        navigate('/loginpage'); // Redirect to login page if user is not authenticated
+        navigate('/LoginPage'); // Redirect to login page if user is not authenticated
         return null;
     }
 
     const handleTransactionsClick = () => {
-        navigate('/transactions'); // Navigate to Transactions page when button is clicked
+        navigate('/TransactionsPage'); // Navigate to Transactions page when button is clicked
     };
 
     return (
