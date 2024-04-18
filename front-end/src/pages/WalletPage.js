@@ -33,7 +33,7 @@ const WalletPage = () => {
 
     return (
         <div className="wallet-page-container">
-            <Navbar /> {/* Add Navbar component */}
+ {/* Add Navbar component */}
             <CardCarousel />
             <div className="transactions-container">
                 <div className="transactions-header">
