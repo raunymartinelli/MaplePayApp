@@ -15,7 +15,7 @@ const LoginPage = () => {
         try {
             const { data } = await loginUser({ variables: { email, password } });
             localStorage.setItem('token', data.loginUser.token); 
-            navigate('/wallet'); 
+            navigate('/'); 
         } catch (err) {
             console.error('Login error', err);
         }
