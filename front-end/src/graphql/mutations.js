@@ -28,8 +28,8 @@ export const REGISTER_USER = gql`
 `;
 
 export const ADD_FUNDS = gql`
-  mutation AddFunds($amount: Float!) {
-    addFunds(amount: $amount) {
+  mutation AddFunds($amount: Float!, $_id: ID!) {
+    addFunds(_id: $_id, amount: $amount) {
       _id
       amount
       date
@@ -42,8 +42,8 @@ export const ADD_FUNDS = gql`
 `;
 
 export const TRANSFER_FUNDS = gql`
-  mutation TransferFunds($toUserId: ID!, $amount: Float!) {
-    transferFunds(toUserId: $toUserId, amount: $amount) {
+  mutation TransferFunds($fromUserId: ID!, $toUserId: ID!, $amount: Float!) {
+    transferFunds(fromUserId: $fromUserId, toUserId: $toUserId, amount: $amount) {
       _id
       amount
       date
@@ -56,8 +56,8 @@ export const TRANSFER_FUNDS = gql`
 `;
 
 export const WITHDRAW_FUNDS = gql`
-  mutation WithdrawFunds($userId: ID!, $amount: Float!) {
-    withdrawFunds(_id: $userId, amount: $amount) {
+  mutation WithdrawFunds($_id: ID!, $amount: Float!) {
+    withdrawFunds(_id: $_id, amount: $amount) {
       _id
       operationType
       amount
@@ -67,6 +67,27 @@ export const WITHDRAW_FUNDS = gql`
         _id
         name
       }
+    }
+  }
+`;
+
+export const UPDATE_USER_FIELD_MUTATION = gql`
+  mutation UpdateUserField($_id: ID!, $field: String!, $value: String!) {
+    updateUserField(_id: $_id, field: $field, value: $value) {
+      _id
+      name
+      email
+    }
+  }
+`;
+
+export const ADD_PROFILE_PICTURE_MUTATION = gql`
+  mutation AddProfilePicture($_id: ID!, $picture: String!) {
+    addProfilePicture(_id: $_id, picture: $picture) {
+      _id
+      name
+      email
+      profilePicture
     }
   }
 `;

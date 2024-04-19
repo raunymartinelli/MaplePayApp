@@ -5,8 +5,6 @@
     padding: 20px;
     margin: 20px auto; /* Center the container horizontally */
     max-width: 900px; /* Limit the maximum width of the container */
-    display: flex; /* Display flex to align items vertically */
-    flex-direction: column; /* Arrange child elements vertically */
 }
 
 .wallet-balance {
@@ -49,41 +47,10 @@
     background-color: #f1f1f1;
 }
 
-.wallet-buttons-container {
-    display: flex;
-    justify-content: space-between; /* Space evenly between buttons */
-    margin-top: auto; /* Push buttons to the bottom */
-}
-
-.wallet-send-button,
-.wallet-add-button {
-    padding: 10px 20px;
-    background-color: #D24545;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.wallet-send-button:hover,
-.wallet-add-button:hover {
-    background-color: #B53636; /* Darker background color on hover */
-}
-
 /* Adjustments for smaller screens */
 @media (max-width: 768px) {
     .wallet-container {
         padding: 10px;
         margin: 10px auto; /* Adjust margin for smaller screens */
-    }
-
-    .wallet-buttons-container {
-        flex-direction: column; /* Stack buttons vertically on smaller screens */
-        align-items: center; /* Center buttons vertically */
-    }
-
-    .wallet-send-button,
-    .wallet-add-button {
-        margin-top: 10px; /* Add margin between buttons */
     }
 }

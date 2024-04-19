@@ -8,12 +8,15 @@ import TransactionsPage from '../pages/TransactionsPage'
 import './app.css';
 import SendMoney from '../components/SendMoney';
 import Request from '../components/request';
+import Insights from '../pages/Insights';
+import AccountView from '../pages/AccountView';
 const App = () => {
     return (
         <Router>
             <div>
                 <Routes>
                     <Route path="/login" element={<LoginPage />} />
+                    <Route path="/Insights" element={<Insights />} />
                     <Route path="/register" element={<RegisterPage />} />
                     <Route path="/wallet" element={<WalletPage />} />
                     <Route path="/transactions" element={<TransactionsPage />} />
@@ -21,6 +24,7 @@ const App = () => {
                     <Route path="/sendMoney" element={<SendMoney/>}/>
                     <Route path="/request" element={<Request/>}/>
                     <Route path="/" element={<HomePage />} /> {/* Default route */}
+                    <Route path="/AccountView" element={<AccountView/>} />
                 </Routes>
             </div>
         </Router>

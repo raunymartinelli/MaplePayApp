@@ -20,14 +20,13 @@ const typeDefs = gql`
     contacts: [User]!
     transactions: [MonetaryOperation]!
   }
-  
+
   type TransferOperationResult {
-  operation: MonetaryOperation!
-  fromUser: User!
-  toUser: User!
-}
-
-
+    operation: MonetaryOperation!
+    fromUser: User!
+    toUser: User!
+  }
+  
   type MonetaryOperation {
     _id: ID!
     operationType: OperationType!
@@ -56,8 +55,11 @@ const typeDefs = gql`
     addFunds(_id: ID!, amount: Float!): MonetaryOperation!
     transferFunds(fromUserId: ID!, toUserId: ID!, amount: Float!): MonetaryOperation!
     withdrawFunds(_id: ID!, amount: Float!): MonetaryOperation!
+
+    # New mutations
+    updateUserField(userId: ID!, field: String!, value: String!): User!
+    addProfilePicture(userId: ID!, picture: Upload!): User!
   }
 `;
 
 module.exports = typeDefs;
-

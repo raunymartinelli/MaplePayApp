@@ -1,6 +1,7 @@
 import React from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_USER_BY_ID, GET_ALL_MONETARY_OPERATIONS } from '../graphql/queries';
+import './css/wallet.css';
 
 const Wallet = ({ userId }) => {
     // Query for user information
@@ -21,30 +22,39 @@ const Wallet = ({ userId }) => {
     if (userError || operationsError) return <p>An error occurred: {userError?.message || operationsError?.message}</p>;
 
     return (
-        <div className="wallet-container">
-            {userData && userData.getUserById && (
-                <p className="wallet-balance">Balance: ${userData.getUserById.amount.toFixed(2)}</p>
-            )}
-            {operationsData && operationsData.getAllMonetaryOperations && (
-                 <table className="wallet-table">
-                    <thead>
-                        <tr>
-                            <th>Operation Type</th>
-                            <th>Amount</th>
-                            <th>Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {operationsData.getAllMonetaryOperations.slice(0, 3).map(operation => (
-                            <tr key={operation._id}>
-                                <td>{operation.operationType}</td>
-                                <td>${operation.amount.toFixed(2)}</td>
-                                <td>{new Date(operation.date).toLocaleDateString()}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            )}
+        <div className='wallet-container'>
+            <div className="flex flex-col sm:flex-row">
+                {/* Left Column */}
+                <div className="flex-1 sm:w-1/2 p-4">
+                    {/* Remove CardCarousel from here */}
+                    {userData && userData.getUserById && (
+                        <p className="wallet-balance text-lg">Balance: ${userData.getUserById.amount.toFixed(2)}</p>
+                    )}
+                </div>
+                {/* Right Column */}
+                <div className="flex-1 sm:w-1/2 p-4">
+                    {operationsData && operationsData.getAllMonetaryOperations && (
+                        <table className="wallet-table">
+                            <thead>
+                                <tr>
+                                    <th>Operation Type</th>
+                                    <th>Amount</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {operationsData.getAllMonetaryOperations.slice(0, 3).map(operation => (
+                                    <tr key={operation._id}>
+                                        <td>{operation.operationType}</td>
+                                        <td>${operation.amount.toFixed(2)}</td>
+                                        <td>{new Date(operation.date).toLocaleDateString()}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    )}
+                </div>
+            </div>
         </div>
     );
 };
